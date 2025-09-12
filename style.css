@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-family: monospace;
+    color: aliceblue;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #1e1e1e;
+}
+
+h1 {
+    margin-top: 12px;
+    font-size: 2em;
+}
+
+main {
+    flex: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 12px;
+    max-width: 500px;
+}
+
+footer small, footer a {
+    font-size: 0.85em;
+}
+
+#card {
+    border: 5px solid gray;
+    border-radius: 12px;
+    height: 65%;
+    min-height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    text-align: center;
+}
+
+#card > #answer {
+    display: none;
+    transform: rotateY(180deg);
+}
+
+#card, #card > #answer, #card > #question {
+    transition: all 705ms;
+    cursor: pointer;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0;
+}
+
+.controls > .left-controls {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.controls > .right-controls {
+    display: flex;
+    gap: 12px;
+    justify-self: space-between;
+    align-items: center;
+}
+
+#card, .controls {
+    width: 95%;
+}
+
+a:hover {
+    color: blue;
+    transition: all 225ms;
+}
+
+button {
+    cursor: pointer;
+    padding: 8px 12px;
+    background-color: #000;
+    border-radius: 8px;
+    transition: all 225ms;
+}
+
+button:hover {
+    background-color: yellow;
+    color: black;
+}
+
+footer {
+    margin-bottom: 8px;
+}
