@@ -64,6 +64,7 @@ footer small, footer a {
     justify-content: center;
     align-items: center;
     margin: 12px 0;
+    flex-wrap: wrap;
 }
 
 .controls > .left-controls {
