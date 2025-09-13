@@ -91,8 +91,14 @@ function rotateCard() {
     }
 }
 
+function storeInDB() {
+    let transaction = db.transaction("cardsContents", "readwrite");
+    let contents = transaction.objectStore("cardsContents");
+
+}
 
 window.onload = function () {
+    let contents = this.localStorage.setItem("cache", JSON.stringify(cardContents));
     if (cardContents.length === 0) {
         reRenderContent(-1);
     } else {
@@ -121,6 +127,7 @@ deleteBtn.addEventListener("click", () => {
     if (confirmation) {
         if (cardContents.length > 0) {
             cardContents.splice(currentIndex, 1);
+            localStorage.setItem("cache", JSON.stringify(cardContents))
             reRenderContent(--currentIndex);
         } else {
             alert("There are no flashcards to delete.")
@@ -135,6 +142,7 @@ addBtn.addEventListener("click", () => {
         if (answer !== null && answer !== "") {
             cardContents.push({question, answer});
             if (currentIndex < 0) currentIndex = 0;
+            localStorage.setItem("cache", JSON.stringify(cardContents))
             reRenderContent(currentIndex);
         }
     } 
