@@ -7,6 +7,9 @@ const nextBtn = document.getElementById("next");
 const prevBtn = document.getElementById("previous");
 const deleteBtn = document.getElementById("delete-card");
 const addBtn = document.getElementById("add-card");
+const openHamburgerMenuBtn = document.getElementById("hamburger-open-button");
+const closeHamburgerMenuBtn = document.getElementById("hamburger-close-button");
+const hamburgerMenuEl = document.getElementById("hamburger-menu");
 
 let rotate = false;
 let currentIndex = 0;
@@ -15,7 +18,34 @@ const defaultCard = {
     answer: "Click the delete button to delete the current flashcard"
 };
 
+/**
+ * Structure: Array of objects where each object represents a card
+ *      question - Contains the question
+ *      answer - Contains the answer to the question
+ */
 let cardContents = [
+];
+
+/**
+ * Array of objects where each object represents each folder
+ * Folders contains name and card
+ * card is an orray of object where each object therein represents cards with
+ * question and answer fields
+ */
+let cache = [
+    {
+        name: "Folder Names",
+        cards: [
+            {
+                question: "What is the current year?",
+                answer: "2025",
+            },
+            { 
+                question: "What are the 3 service models?",
+                answer: "IaaS, PaaS & SaaS",
+            }
+        ]
+    },
 ];
 
 /**
@@ -108,4 +138,14 @@ addBtn.addEventListener("click", () => {
             reRenderContent(currentIndex);
         }
     } 
+});
+
+openHamburgerMenuBtn.addEventListener("click", () => {
+    hamburgerMenuEl.classList.remove("hide");
+    hamburgerMenuEl.classList.add("show");
+});
+
+closeHamburgerMenuBtn.addEventListener("click", () => {
+    hamburgerMenuEl.classList.remove("show");
+    hamburgerMenuEl.classList.add("hide");
 });

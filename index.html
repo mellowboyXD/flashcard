@@ -8,6 +8,19 @@
 </head>
 <body>
     <header>
+        <button id="hamburger-open-button" title="Open menu">open</button>
+        <div id="hamburger-menu" class="hamburger-container hide">
+            <div class="hamburger-controls-container">
+                <button id="hamburger-create-button" title="Create a new folder">create</button>
+                <button id="hamburger-close-button" title="Close menu">close</button>
+            </div>
+            <div class="hamburger-contents">
+                <ol class="folders">
+                    <li>Folder 1</li>
+                    <li>Folder 2</li>
+                </ol>
+            </div>
+        </div>
         <h1>Flashcard</h1>
     </header>
     <main>
@@ -17,13 +30,13 @@
         </div>
         <div class="controls">
             <div class="left-controls">
-                <button id="previous">prev</button>
+                <button id="previous" title="View previous card">prev</button>
                 <p id="card-count"><span id="index">12</span>/<span id="length">1000</span></p>
-                <button id="next">next</button>
+                <button id="next" title="View next card">next</button>
             </div>
             <div class="right-controls">
-                <button id="add-card">add</button>
-                <button id="delete-card">delete</button>
+                <button id="add-card" title="Create a new flashcard">add</button>
+                <button id="delete-card" title="Delete current flashcard">delete</button>
             </div>
         </div>
     </main>

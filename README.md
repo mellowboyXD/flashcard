@@ -8,3 +8,4 @@ You know how a flashcard works already. :)
 
 - [x] Create App
 - [ ] Save to LocalStorage
+- [ ] Add ability to create folders for different flashcard groups
