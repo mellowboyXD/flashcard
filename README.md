@@ -7,5 +7,5 @@ You know how a flashcard works already. :)
 ## TODO
 
 - [x] Create App
-- [ ] Save to LocalStorage
+- [x] Save to LocalStorage
 - [ ] Add ability to create folders for different flashcard groups
