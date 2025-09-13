@@ -91,14 +91,10 @@ function rotateCard() {
     }
 }
 
-function storeInDB() {
-    let transaction = db.transaction("cardsContents", "readwrite");
-    let contents = transaction.objectStore("cardsContents");
-
-}
-
 window.onload = function () {
-    let contents = this.localStorage.setItem("cache", JSON.stringify(cardContents));
+    cardContents = JSON.parse(localStorage.getItem("cache"));
+    if (cardContents === null) cardContents = [];
+    
     if (cardContents.length === 0) {
         reRenderContent(-1);
     } else {
