@@ -10,9 +10,11 @@ const addBtn = document.getElementById("add-card");
 const openHamburgerMenuBtn = document.getElementById("hamburger-open-button");
 const closeHamburgerMenuBtn = document.getElementById("hamburger-close-button");
 const hamburgerMenuEl = document.getElementById("hamburger-menu");
+const folderButtons = document.querySelectorAll(".folder");
 
 let rotate = false;
 let currentIndex = 0;
+let currentFolderIndex = 0;
 const defaultCard = {
     question: "Click the add button to create a flashcard",
     answer: "Click the delete button to delete the current flashcard"
@@ -45,6 +47,10 @@ let cache = [
                 answer: "IaaS, PaaS & SaaS",
             }
         ]
+    },
+    {
+        name: "Folder Names",
+        cards: []
     },
 ];
 
@@ -152,4 +158,18 @@ openHamburgerMenuBtn.addEventListener("click", () => {
 closeHamburgerMenuBtn.addEventListener("click", () => {
     hamburgerMenuEl.classList.remove("show");
     hamburgerMenuEl.classList.add("hide");
+});
+
+folderButtons.forEach((button) => {
+    button.addEventListener("change", (event) => {
+        const id = event.target.id;
+        if (cache[id] !== undefined) {
+            cardContents = cache[id].cards;
+            if (cardContents.length === 0) {
+                reRenderContent(-1);
+            } else {
+                reRenderContent(0);
+            }
+        }
+    });
 });

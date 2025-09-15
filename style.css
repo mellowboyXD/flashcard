@@ -1,6 +1,6 @@
 * {
     margin: 0;
-    /* padding: 0; */
+    padding: 0;
     box-sizing: border-box;
     font-size: 18px;
     font-family: monospace;
@@ -63,14 +63,6 @@ h1 {
 
 #hamburger-create-button {
     flex: 2;
-}
-
-.hamburger-contents {
-    border: 1px solid purple;
-}
-
-ol {
-    padding-inline: 20%;
 }
 
 main {
@@ -150,11 +142,48 @@ button {
     transition: all 225ms;
 }
 
-button:hover {
-    background-color: yellow;
-    color: black;
-}
-
 footer {
     margin-bottom: 8px;
+}
+
+ol {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+li {
+    width: 100%;
+    display: flex;
+    gap: 6px;
+}
+
+.folder {
+    padding: 8px;
+}
+
+input[type="radio"], label{
+    cursor: pointer;
+    padding: 6px 0;
+}
+
+label {
+    width: 100%;
+    display: inline;
+}
+
+input[type="radio"]:hover + label:hover {
+    background-color: yellow;
+    color: #000;
+}
+
+input[type="radio"]:checked + label {
+    color: #000;
+    background-color: aqua;
+}
+
+button:hover { 
+    background-color: yellow;
+    color: black;
 }

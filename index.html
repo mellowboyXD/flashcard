@@ -8,16 +8,22 @@
 </head>
 <body>
     <header>
-        <button id="hamburger-open-button" title="Open menu">open</button>
+        <button id="hamburger-open-button" title="Open menu">...</button>
         <div id="hamburger-menu" class="hamburger-container hide">
             <div class="hamburger-controls-container">
-                <button id="hamburger-create-button" title="Create a new folder">create</button>
-                <button id="hamburger-close-button" title="Close menu">close</button>
+                <button id="hamburger-create-button" title="Create a new folder">+</button>
+                <button id="hamburger-close-button" title="Close menu">x</button>
             </div>
             <div class="hamburger-contents">
                 <ol class="folders">
-                    <li>Folder 1</li>
-                    <li>Folder 2</li>
+                    <li>
+                        <input class="folder" type="radio" name="folder-select" id="0">
+                        <label for="0">Folder 1</label>
+                    </li>
+                    <li>
+                        <input class="folder" type="radio" name="folder-select" id="1">
+                        <label for="1">Folder 2</label>
+                    </li>
                 </ol>
             </div>
         </div>
