@@ -10,23 +10,17 @@ const addBtn = document.getElementById("add-card");
 const openHamburgerMenuBtn = document.getElementById("hamburger-open-button");
 const closeHamburgerMenuBtn = document.getElementById("hamburger-close-button");
 const hamburgerMenuEl = document.getElementById("hamburger-menu");
-const folderButtons = document.querySelectorAll(".folder");
+const hamburgerCreateButton = document.getElementById("hamburger-create-button");
+const folderContainerEl = document.getElementById("folder-container");
 
 let rotate = false;
 let currentIndex = 0;
 let currentFolderIndex = 0;
+const cacheName = "cache-v0.1"
 const defaultCard = {
     question: "Click the add button to create a flashcard",
     answer: "Click the delete button to delete the current flashcard"
 };
-
-/**
- * Structure: Array of objects where each object represents a card
- *      question - Contains the question
- *      answer - Contains the answer to the question
- */
-let cardContents = [
-];
 
 /**
  * Array of objects where each object represents each folder
@@ -34,33 +28,17 @@ let cardContents = [
  * card is an orray of object where each object therein represents cards with
  * question and answer fields
  */
-let cache = [
-    {
-        name: "Folder Names",
-        cards: [
-            {
-                question: "What is the current year?",
-                answer: "2025",
-            },
-            { 
-                question: "What are the 3 service models?",
-                answer: "IaaS, PaaS & SaaS",
-            }
-        ]
-    },
-    {
-        name: "Folder Names",
-        cards: []
-    },
-];
+let cache;
 
 /**
  * Updates the flashcard contents being displayed with the relevant one
  * @param {number} index 
+ * @param {Object[]} cardContents 
  */
-function reRenderContent(index) {
+function reRenderContent(cardContents, index) {
     rotate = true;
     rotateCard();
+    
     if (cardContents.length === 0) {
         questionEl.innerText = defaultCard.question;
         answerEl.innerText = defaultCard.answer;
@@ -97,15 +75,74 @@ function rotateCard() {
     }
 }
 
+function reRenderFolders(cache, index) {
+    folderContainerEl.innerHTML = "";
+    cache.forEach((folder, id) => {
+        const liEl = `
+            <li>
+                <input class="folder" type="radio" name="folder-select" id="${id}" ${id == index ? "checked" : ""}>
+                <label for="${id}">${folder.name}</label>
+                ${id !== 0 ? `<button class="delete-folder" id="${id}" title="Delete folder and its contents">del</delete>` : ""}
+            </li>
+        `;
+        folderContainerEl.innerHTML += liEl; 
+    });
+}
+
 window.onload = function () {
-    cardContents = JSON.parse(localStorage.getItem("cache"));
-    if (cardContents === null) cardContents = [];
+    cache = JSON.parse(localStorage.getItem(cacheName));
     
-    if (cardContents.length === 0) {
-        reRenderContent(-1);
+    if (cache === null) cache = [{name: "Default", cards: []}];
+    
+    currentFolderIndex = 0;
+    currentIndex = 0;
+
+    reRenderFolders(cache, currentFolderIndex);
+    
+    if (cache[currentFolderIndex].cards.length === 0) {
+        reRenderContent(cache[currentFolderIndex].cards, -1);
     } else {
-        reRenderContent(0);
+        reRenderContent(cache[currentFolderIndex].cards, currentIndex);
     }
+
+    const folderButtons = document.querySelectorAll(".folder"); 
+    folderButtons.forEach((button) => {
+        button.addEventListener("change", (event) => {
+            const id = event.target.id;
+            console.log(id);
+            
+            if (cache[id] !== undefined) {
+                currentFolderIndex = id;
+                currentIndex = cache[currentFolderIndex].cards.length === 0 ? -1 : 0;
+                if (cache[currentFolderIndex].cards.length === 0) {
+                    reRenderContent(cache[currentFolderIndex].cards, -1);
+                } else {
+                    reRenderContent(cache[currentFolderIndex].cards, 0);
+                }
+            }
+        });
+    });
+
+    const folderDeleteButtons = document.querySelectorAll(".delete-folder");
+    folderDeleteButtons.forEach((delButton) => {
+        delButton.addEventListener("click", (event) => {
+            const confirmation = confirm("Are you sure you want to delete this folder?")
+            if (confirmation) {
+                console.log("Delete folder id: ", typeof event.target.id);
+                const id = parseInt(event.target.id);
+                cache.splice(id, 1);
+                localStorage.setItem(cacheName, JSON.stringify(cache));
+                console.log(currentFolderIndex);
+                
+                reRenderFolders(cache, --currentFolderIndex);
+                currentIndex = cache[currentFolderIndex].cards.length === 0 ? -1 : 0;
+                reRenderContent(cache[currentFolderIndex].cards, currentIndex);
+                
+                window.location.reload(); // temporary fix to bug:
+                                        //  after creating new folder, cannot change folder no more unless there is a window reload
+            }
+        })
+    });
 };
 
 cardEl.addEventListener("click", () => {
@@ -113,24 +150,24 @@ cardEl.addEventListener("click", () => {
 });
 
 nextBtn.addEventListener("click", () => {
-    if (currentIndex < cardContents.length - 1) {
-        reRenderContent(++currentIndex)
+    if (currentIndex < cache[currentFolderIndex].cards.length - 1) {
+        reRenderContent(cache[currentFolderIndex].cards, ++currentIndex);
     }
 });
 
 prevBtn.addEventListener("click", () => {
     if (currentIndex > 0) {
-        reRenderContent(--currentIndex);
+        reRenderContent(cache[currentFolderIndex].cards, --currentIndex);
     }
 });
 
 deleteBtn.addEventListener("click", () => {
     let confirmation = confirm("Are you sure you want to delete this card?");
     if (confirmation) {
-        if (cardContents.length > 0) {
-            cardContents.splice(currentIndex, 1);
-            localStorage.setItem("cache", JSON.stringify(cardContents))
-            reRenderContent(--currentIndex);
+        if (cache[currentFolderIndex].cards.length > 0) {
+            cache[currentFolderIndex].cards.splice(currentIndex, 1);
+            localStorage.setItem(cacheName, JSON.stringify(cache))
+            reRenderContent(cache[currentFolderIndex].cards, --currentIndex);
         } else {
             alert("There are no flashcards to delete.")
         }
@@ -142,10 +179,10 @@ addBtn.addEventListener("click", () => {
     if (question !== null && question !== "") {
         let answer = prompt("Answer:");
         if (answer !== null && answer !== "") {
-            cardContents.push({question, answer});
-            if (currentIndex < 0) currentIndex = 0;
-            localStorage.setItem("cache", JSON.stringify(cardContents))
-            reRenderContent(currentIndex);
+            
+            cache[currentFolderIndex].cards.push({question, answer});
+            localStorage.setItem(cacheName, JSON.stringify(cache))
+            reRenderContent(cache[currentFolderIndex].cards, ++currentIndex);
         }
     } 
 });
@@ -160,16 +197,20 @@ closeHamburgerMenuBtn.addEventListener("click", () => {
     hamburgerMenuEl.classList.add("hide");
 });
 
-folderButtons.forEach((button) => {
-    button.addEventListener("change", (event) => {
-        const id = event.target.id;
-        if (cache[id] !== undefined) {
-            cardContents = cache[id].cards;
-            if (cardContents.length === 0) {
-                reRenderContent(-1);
-            } else {
-                reRenderContent(0);
-            }
-        }
-    });
-});
+hamburgerCreateButton.addEventListener("click", () => {
+    const folderName = prompt("Folder name: ");
+    if (folderName !== null && folderName !== "") {
+        let newFolder = {
+            name: folderName,
+            cards: []
+        };
+        cache.push(newFolder);
+        localStorage.setItem(cacheName, JSON.stringify(cache));
+        currentFolderIndex = cache.length - 1;
+        currentIndex = -1;
+        reRenderFolders(cache, currentFolderIndex)
+        reRenderContent(cache[currentFolderIndex].cards, currentIndex);
+        window.location.reload(); // temporary fix to bug:
+                                //  after creating new folder, cannot change folder no more unless there is a window reload
+    }
+})
