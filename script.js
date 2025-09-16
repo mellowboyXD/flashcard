@@ -104,46 +104,34 @@ window.onload = function () {
     } else {
         reRenderContent(cache[currentFolderIndex].cards, currentIndex);
     }
-
-    const folderButtons = document.querySelectorAll(".folder"); 
-    folderButtons.forEach((button) => {
-        button.addEventListener("change", (event) => {
-            const id = event.target.id;
-            console.log(id);
-            
-            if (cache[id] !== undefined) {
-                currentFolderIndex = id;
-                currentIndex = cache[currentFolderIndex].cards.length === 0 ? -1 : 0;
-                if (cache[currentFolderIndex].cards.length === 0) {
-                    reRenderContent(cache[currentFolderIndex].cards, -1);
-                } else {
-                    reRenderContent(cache[currentFolderIndex].cards, 0);
-                }
-            }
-        });
-    });
-
-    const folderDeleteButtons = document.querySelectorAll(".delete-folder");
-    folderDeleteButtons.forEach((delButton) => {
-        delButton.addEventListener("click", (event) => {
-            const confirmation = confirm("Are you sure you want to delete this folder?")
-            if (confirmation) {
-                console.log("Delete folder id: ", typeof event.target.id);
-                const id = parseInt(event.target.id);
-                cache.splice(id, 1);
-                localStorage.setItem(cacheName, JSON.stringify(cache));
-                console.log(currentFolderIndex);
-                
-                reRenderFolders(cache, --currentFolderIndex);
-                currentIndex = cache[currentFolderIndex].cards.length === 0 ? -1 : 0;
-                reRenderContent(cache[currentFolderIndex].cards, currentIndex);
-                
-                window.location.reload(); // temporary fix to bug:
-                                        //  after creating new folder, cannot change folder no more unless there is a window reload
-            }
-        })
-    });
 };
+
+folderContainerEl.addEventListener("click", (event) => {
+    if(event.target.classList.contains("folder")){
+        const id = event.target.id;
+        if (cache[id] !== undefined) {
+            currentFolderIndex = id;
+            currentIndex = cache[currentFolderIndex].cards.length === 0 ? -1 : 0;
+            if (cache[currentFolderIndex].cards.length === 0) {
+                reRenderContent(cache[currentFolderIndex].cards, -1);
+            } else {
+                reRenderContent(cache[currentFolderIndex].cards, 0);
+            }
+        }
+    } else if (event.target.classList.contains("delete-folder")) {
+        const confirmation = confirm("Are you sure you want to delete this folder?")
+        if (confirmation) {
+            const id = parseInt(event.target.id);
+            cache.splice(id, 1);
+            localStorage.setItem(cacheName, JSON.stringify(cache));
+            currentFolderIndex = (currentFolderIndex == id) ? --currentFolderIndex : currentFolderIndex;
+            
+            reRenderFolders(cache, currentFolderIndex);
+            currentIndex = cache[currentFolderIndex].cards.length === 0 ? -1 : 0;
+            reRenderContent(cache[currentFolderIndex].cards, currentIndex);
+        }
+    }
+});
 
 cardEl.addEventListener("click", () => {
     rotateCard();
@@ -210,7 +198,5 @@ hamburgerCreateButton.addEventListener("click", () => {
         currentIndex = -1;
         reRenderFolders(cache, currentFolderIndex)
         reRenderContent(cache[currentFolderIndex].cards, currentIndex);
-        window.location.reload(); // temporary fix to bug:
-                                //  after creating new folder, cannot change folder no more unless there is a window reload
     }
 })
