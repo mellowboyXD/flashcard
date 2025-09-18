@@ -170,7 +170,8 @@ addBtn.addEventListener("click", () => {
             
             cache[currentFolderIndex].cards.push({question, answer});
             localStorage.setItem(cacheName, JSON.stringify(cache))
-            reRenderContent(cache[currentFolderIndex].cards, ++currentIndex);
+            currentIndex = cache[currentFolderIndex].cards.length - 1; 
+            reRenderContent(cache[currentFolderIndex].cards, currentIndex);
         }
     } 
 });
